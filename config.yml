@@ -1,0 +1,31 @@
+theme:
+  regular:    [220, 220, 220]
+  defclass:   [203, 191, 255]
+  construct:  [143, 143, 245]
+  function:   [102, 204, 255]
+  string:     [255, 112, 87]
+  numeral:    [255, 153, 102]
+  operator:   [255, 218, 179]
+  background: [0, 51, 77]
+  black:      [0, 0, 0]
+
+# ratios [self, other, div]
+background:
+  blockratio: [3, 1, 4] # other: mean gray
+  edgeratio:  [3, 1, 4] # other: black
+  edgewidth:  8
+  edgebands:  8
+  bgndbands:  [1, 4] # band, bgnd
+
+dimensions:
+  resolution: [3200, 1800]
+  blocksize:  [2400, 1672]
+  fontheight: 40
+  fontratio:  0.6
+  lineheight: 1.2
+
+video:
+  fps:    8
+  chps:   8
+  fourcc: "MJPG"
+  ext: "avi"
