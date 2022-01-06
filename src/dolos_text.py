@@ -41,7 +41,7 @@ class Typewriter:
     def __init__(self, config, image):
         self.cfg = config
         self.image = image
-        self.image_pil = Image.fromarray(image.astype(np.uint8))
+        self.image_pil = Image.fromarray(image)
         self.draw = ImageDraw.Draw(self.image_pil)
         self.font = ImageFont.truetype(config['font'], config['fontheight'])
         self.res = np.array(config['dimensions']['resolution'])
@@ -80,11 +80,11 @@ class Typewriter:
 
         if word in ['def', 'class']:
             self._write(word, 'defclass', x, y)
-        elif w - 1 > 0 and words[w - 1] in ['def', 'class']:
+        elif w - 2 >= 0 and words[w - 2] in ['def', 'class']:
             self._write(word, 'construct', x, y)
         elif w + 1 < len(words) and words[w + 1] == '(':
             self._write(word, 'function', x, y)
-        elif w - 1 > 0 and word[w - 1] == '.':
+        elif w - 1 >= 0 and word[w - 1] == '.':
             self._write(word, 'member', x, y)
         elif word[0] == "'":
             self._write(word, 'string', x, y)

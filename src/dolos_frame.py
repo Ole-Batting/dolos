@@ -54,4 +54,4 @@ def make_frame(config: dict) -> np.array:
     block = np.ones((*(np.flip(bk_size)), 3)) * bk_color
     add_centered(frame, block)
 
-    return frame
+    return frame.astype(np.uint8)
