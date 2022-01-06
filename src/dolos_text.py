@@ -83,7 +83,7 @@ class Typewriter:
             self._write(word, 'construct', x, y)
         elif w + 1 < len(words) and words[w + 1] == '(':
             self._write(word, 'function', x, y)
-        elif w - 1 > 0 and word[w - 1] == '.'
+        elif w - 1 > 0 and word[w - 1] == '.':
             self._write(word, 'member', x, y)
         elif word[0] == "'":
             self._write(word, 'string', x, y)

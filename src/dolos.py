@@ -38,7 +38,7 @@ class Animator:
             plt.imsave(self.frame_fig_path, self.frame.astype(np.uint8))
             pickle.dump(self.frame, open(self.frame_path, 'wb'))
 
-    def 
+    
 
 if __name__ == '__main__':
     anim = Animator()
