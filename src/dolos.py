@@ -28,17 +28,19 @@ class Animator:
             load_frame = False
 
         with open(self.config_path, 'r') as file:
-            config = yaml.safe_load(file)
+            self.config = yaml.safe_load(file)
 
         if load_frame and os.path.isfile(self.frame_path):
             self.frame = pickle.load(open(self.frame_path, 'rb'))
         else:
             pickle.dump(new_hash, open(self.hash_path, 'wb'))
-            self.frame = make_frame(config)
+            self.frame = make_frame(self.config)
             plt.imsave(self.frame_fig_path, self.frame.astype(np.uint8))
             pickle.dump(self.frame, open(self.frame_path, 'wb'))
 
-    
 
 if __name__ == '__main__':
     anim = Animator()
+    typewriter = Typewriter(anim.config, anim.frame)
+    test1 = typewriter.add_line('class Guitar:', 0, 0)
+    plt.imsave('figs/test1.png', test1.astype(np.uint8))

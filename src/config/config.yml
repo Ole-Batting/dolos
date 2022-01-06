@@ -21,7 +21,6 @@ background:
 dimensions:
   resolution: [3200, 1800]
   blocksize:  [2400, 1672]
-  fontratio:  0.6
   lineheight: 1.2
 
 video:
@@ -32,4 +31,5 @@ video:
 
 font: System/Library/Fonts/Menlo.ttc
 fontheight: 40
+fontratio:  0.6
 tabwidth: 4

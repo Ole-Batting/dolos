@@ -38,19 +38,19 @@ def is_numeric(s):
         return False
 
 class Typewriter:
-    def __init__(self, image, config):
+    def __init__(self, config, image):
         self.cfg = config
         self.image = image
-        self.image_pil = Image.fromarray(image)
-        self.draw = ImageDraw(self.image_pil)
-        self.font = ImageFont(config['font'], config['fontheight'])
+        self.image_pil = Image.fromarray(image.astype(np.uint8))
+        self.draw = ImageDraw.Draw(self.image_pil)
+        self.font = ImageFont.truetype(config['font'], config['fontheight'])
         self.res = np.array(config['dimensions']['resolution'])
-        self.block = np.array(config['dimensions']['blicksize'])
+        self.block = np.array(config['dimensions']['blocksize'])
         self.startx, self.starty = (self.res - self.block) // 2
         self.endx, self.endy = (self.res + self.block) // 2
         self.texth = config['fontheight']
         self.textw = config['fontratio'] * self.texth
-        self.lineh = config['lineheight'] * self.texth
+        self.lineh = config['dimensions']['lineheight'] * self.texth
         self.textx = self.startx + self.lineh
         self.texty = self.starty + self.lineh
         self.tabw = config['tabwidth']
@@ -59,8 +59,10 @@ class Typewriter:
     def add_line(self, *args):
         self._add_line(*args)
         self.image = np.array(self.image_pil)
+        return self.image
 
     def _add_line(self, line, row, tabs):
+        self.head = 0
         x = self.textx + tabs * self.tabw * self.textw
         y = self.texty + row * self.lineh
 
@@ -68,14 +70,13 @@ class Typewriter:
         for w, word in enumerate(words):
             self.mint(w, word, words, x, y)
 
-    def _write(word, colortag, x, y):
-        color = self.cfg['theme'][colortag]
-        self.draw((x + self.head * self.textw, y), word, color, font = self.font)
+    def _write(self, word, colortag, x, y):
+        color = tuple(self.cfg['theme'][colortag])
+        self.draw.text((x + self.head * self.textw, y), word, color, font = self.font)
         self.head += len(word)
 
     def mint(self, w, word, words, x, y):
         color = self.cfg['theme']['regular']
-        self.head = 0
 
         if word in ['def', 'class']:
             self._write(word, 'defclass', x, y)
