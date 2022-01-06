@@ -3,10 +3,13 @@ theme:
   defclass:   [203, 191, 255]
   construct:  [143, 143, 245]
   function:   [102, 204, 255]
+  member:     [102, 204, 255]
+  self:       [102, 204, 255]
   string:     [255, 112, 87]
-  numeral:    [255, 153, 102]
+  numeric:    [255, 153, 102]
   operator:   [255, 218, 179]
   background: [0, 51, 77]
+  comment:    [130, 176, 201]
 
 background:
   blockratio: 3 # other: mean gray
@@ -18,12 +21,15 @@ background:
 dimensions:
   resolution: [3200, 1800]
   blocksize:  [2400, 1672]
-  fontheight: 40
   fontratio:  0.6
   lineheight: 1.2
 
 video:
   fps:    8
   chps:   8
-  fourcc: "MJPG"
-  ext: "avi"
+  fourcc: MJPG
+  ext:    avi
+
+font: System/Library/Fonts/Menlo.ttc
+fontheight: 40
+tabwidth: 4
