@@ -40,16 +40,35 @@ class Animator:
 
         self.typewriter = Typewriter(self.config, self.frame)
 
-    def animate(self, lines):
+    def _add_frames(self, frame, writer, n):
+        for _ in range(n):
+            writer.write(frame[:,:,::-1])
+
+    def animate(self, lines, name):
+        filepath = f"output/{name}.{self.config['video']['ext']}"
+        size = tuple(self.config['dimensions']['resolution'])
+        fps = self.config['video']['fps']
+        chps = self.config['video']['chps']
+        n = fps // chps
+        fourcc = cv2.VideoWriter_fourcc(*self.config['video']['fourcc'])
+        writer = cv2.VideoWriter(filepath, fourcc, fps, size)
+        self._add_frames(self.frame, writer, n)
+
         for row, [line, tabs] in enumerate(lines):
             row_frame = self.frame.copy()
             row_typewriter = Typewriter(self.config, row_frame)
             row_typewriter.active_line(row)
+            self._add_frames(row_typewriter.image, writer, n)
             for i in range(len(line)):
-                row_typewriter.add_line(line[:i + 1])
+                row_typewriter.add_line(line[:i + 1], row, tabs)
+                self._add_frames(row_typewriter.image, writer, n)
+            self.frame = self.typewriter.add_line(line, row, tabs)
 
 
 if __name__ == '__main__':
     anim = Animator()
-    test1 = anim.typewriter.add_line('class Guitar:', 0, 0)
-    plt.imsave('figs/test1.png', test1)
+    anim.animate([
+        ['class Guitar', 0],
+        ['def __init__(self):', 1]
+        
+    ], 'testvid')

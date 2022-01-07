@@ -85,7 +85,7 @@ class Typewriter:
             self._write(word, 'construct', x, y)
         elif w + 1 < len(words) and words[w + 1] == '(':
             self._write(word, 'function', x, y)
-        elif w - 1 >= 0 and word[w - 1] == '.':
+        elif w - 1 >= 0 and words[w - 1] == '.':
             self._write(word, 'member', x, y)
         elif word[0] == "'":
             self._write(word, 'string', x, y)
@@ -101,12 +101,12 @@ class Typewriter:
             self._write(word, 'regular', x, y)
 
     def active_line(self, row):
-        color = blend_color(self.cfg['theme']['background'],
+        color = blend_color(np.array(self.cfg['theme']['background']),
                             self.cfg['background']['actratio'],
                             mode = 'white')
-        y1 = self.texty + row * self.lineh
-        y2 = self.texty + (row + 1) * self.lineh
+        y1 = int(self.texty + row * self.lineh)
+        y2 = int(self.texty + (row + 1) * self.lineh)
         self.image[y1:y2, self.startx:self.endx] = \
-            np.ones((self.lineh, self.block[0]), dtype=np.uint8) * color
-        self.image_pil = Image.fromarray(image)
+            np.ones((int(self.lineh), self.block[0], 3), dtype=np.uint8) * color
+        self.image_pil = Image.fromarray(self.image)
         self.draw = ImageDraw.Draw(self.image_pil)
