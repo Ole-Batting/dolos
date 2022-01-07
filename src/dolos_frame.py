@@ -9,9 +9,11 @@ def add_centered(src: np.array, obj: np.array) -> None:
 
 def blend_color(c1, ratio, mode):
     if mode == 'mean gray':
-        c2 = np.ones((3)) * np.mean(c1)
+        c2 = np.ones((3), dtype=np.uint8) * np.mean(c1)
     elif mode == 'black':
-        c2 = np.zeros((3))
+        c2 = np.array([0, 0, 0])
+    elif mode =='white':
+        c2 = np.array([255, 255, 255])
     return (ratio * c1 + c2) / (1 + ratio)
 
 def blend_color_palette(c1, ratio, n):

@@ -1,12 +1,13 @@
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+from dolos_frame import blend_color
 
 def line_splitter(line):
     words = []
     in_string = False
     word = ''
     for i, c in enumerate(line):
-        if c in ' .([{}])' and not in_string:
+        if c in ' .,:([{}])' and not in_string:
             if word:
                 words.append(word)
             words.append(c)
@@ -98,3 +99,14 @@ class Typewriter:
             self._write(word, 'self', x, y)
         else:
             self._write(word, 'regular', x, y)
+
+    def active_line(self, row):
+        color = blend_color(self.cfg['theme']['background'],
+                            self.cfg['background']['actratio'],
+                            mode = 'white')
+        y1 = self.texty + row * self.lineh
+        y2 = self.texty + (row + 1) * self.lineh
+        self.image[y1:y2, self.startx:self.endx] = \
+            np.ones((self.lineh, self.block[0]), dtype=np.uint8) * color
+        self.image_pil = Image.fromarray(image)
+        self.draw = ImageDraw.Draw(self.image_pil)

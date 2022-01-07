@@ -17,6 +17,7 @@ background:
   edgewidth:  8
   edgebands:  8
   bgndbands:  [4, 16] # band, bgnd
+  actratio:   3
 
 dimensions:
   resolution: [3200, 1800]

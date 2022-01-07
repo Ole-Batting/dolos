@@ -38,11 +38,18 @@ class Animator:
             plt.imsave(self.frame_fig_path, self.frame.astype(np.uint8))
             pickle.dump(self.frame, open(self.frame_path, 'wb'))
 
+        self.typewriter = Typewriter(self.config, self.frame)
+
+    def animate(self, lines):
+        for row, [line, tabs] in enumerate(lines):
+            row_frame = self.frame.copy()
+            row_typewriter = Typewriter(self.config, row_frame)
+            row_typewriter.active_line(row)
+            for i in range(len(line)):
+                row_typewriter.add_line(line[:i + 1])
+
 
 if __name__ == '__main__':
     anim = Animator()
-    print(anim.frame.dtype)
-    print(type(anim.frame))
-    typewriter = Typewriter(anim.config, anim.frame)
-    test1 = typewriter.add_line('class Guitar:', 0, 0)
+    test1 = anim.typewriter.add_line('class Guitar:', 0, 0)
     plt.imsave('figs/test1.png', test1)
