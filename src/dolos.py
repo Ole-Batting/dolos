@@ -23,7 +23,7 @@ class Animator:
         if os.path.isfile(self.hash_path):
             old_hash = pickle.load(open(self.hash_path, 'rb'))
             load_frame = old_hash == new_hash
-            print('old_hash == new_hash', load_frame)
+            print('\nold_hash == new_hash', load_frame)
         else:
             load_frame = False
 
@@ -45,14 +45,22 @@ class Animator:
             writer.write(frame[:,:,::-1])
 
     def animate(self, lines, name):
+        print(f'\nStarting animation named {name}')
+
         filepath = f"output/{name}.{self.config['video']['ext']}"
         size = tuple(self.config['dimensions']['resolution'])
         fps = self.config['video']['fps']
         chps = self.config['video']['chps']
         n = fps // chps
+        m = len(lines)
+
+        print(f'\nAnimating {m} lines of code\n')
+
         fourcc = cv2.VideoWriter_fourcc(*self.config['video']['fourcc'])
         writer = cv2.VideoWriter(filepath, fourcc, fps, size)
         self._add_frames(self.frame, writer, n)
+
+        print(f' -- 0/{m} lines animated -- ', end = '\r')
 
         for row, [line, tabs] in enumerate(lines):
             row_frame = self.frame.copy()
@@ -63,12 +71,42 @@ class Animator:
                 row_typewriter.add_line(line[:i + 1], row, tabs)
                 self._add_frames(row_typewriter.image, writer, n)
             self.frame = self.typewriter.add_line(line, row, tabs)
+            print(f' -- {row + 1}/{m} lines animated -- ', end = '\r')
+        writer.release()
 
+        print(f' -- {m}/{m} lines animated -- \n -- done -- \n')
 
 if __name__ == '__main__':
     anim = Animator()
     anim.animate([
-        ['class Guitar', 0],
-        ['def __init__(self):', 1]
-        
+        ["class Guitar", 0],
+        ["def __init__(self):", 1],
+        ["self.tone_dict = {", 2],
+        ["'C': 0, 'C#': 1,", 3],
+        ["'Db': 1, 'D': 2, 'D#': 3,", 3],
+        ["'Eb': 3, 'E': 4,", 3],
+        ["'F': 5, 'F#': 6,", 3],
+        ["'Gb': 6, 'G': 7, 'G#': 8,", 3],
+        ["'Ab': 8, 'A': 9, 'A#': 10,", 3],
+        ["'Bb': 10, 'B': 11", 3],
+        ["}", 2],
+        ["", 2],
+        ["self.note_dict = {", 2],
+        ["'M': ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],", 3],
+        ["'m': ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']", 3],
+        ["}", 2],
+        ["", 2],
+        ["self.chord_base_dict = {", 2],
+        ["'M': np.array([0,4,7]),", 3],
+        ["'M7': np.array([0,4,7,11]),", 3],
+        ["'maj7': np.array([0,4,7,11]),", 3],
+        ["'m': np.array([0,3,7]),", 3],
+        ["'m7': np.array([0,3,7,10]),", 3],
+        ["'dim': np.array([0,3,6]),", 3],
+        ["'dim7': np.array([0,3,6,9]),", 3],
+        ["'aug': np.array([0,4,8]),", 3],
+        ["'aug7': np.array([0,4,8,11]),", 3],
+        ["'7': np.array([0,4,7,10]),", 3],
+        ["'mM7': np.array([0,3,7,11])", 3],
+        ["}", 2]
     ], 'testvid')
