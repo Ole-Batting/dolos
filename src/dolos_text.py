@@ -7,11 +7,14 @@ def line_splitter(line):
     in_string = False
     word = ''
     for i, c in enumerate(line):
-        if c in ' .,:*([{}])' and not in_string:
-            if word:
-                words.append(word)
-            words.append(c)
-            word = ''
+        if c in ' .,:-*([{}])' and not in_string:
+            if c not in '.-*' or not is_numeric(word):
+                if word:
+                    words.append(word)
+                words.append(c)
+                word = ''
+            else:
+                word += c
         elif c == "'":
             word += c
             if in_string:
@@ -77,7 +80,8 @@ class Typewriter:
             'try',
             'except',
             'finally',
-            'with'
+            'with',
+            'None'
         ]
 
     def add_line(self, *args):
@@ -110,7 +114,7 @@ class Typewriter:
             self._write(word, 'function', x, y)
         elif w - 1 >= 0 and words[w - 1] == '.':
             self._write(word, 'member', x, y)
-        elif word[0] == "'":
+        elif word[0] in ["'", '"'] or word[:2] in ["r'", 'r"', "f'", 'f"']:
             self._write(word, 'string', x, y)
         elif word[0] == '#':
             self._write(word, 'comment', x, y)
@@ -129,7 +133,14 @@ class Typewriter:
                             mode = 'white')
         y1 = int(self.texty + row * self.lineh)
         y2 = int(self.texty + (row + 1) * self.lineh)
-        self.image[y1:y2, self.startx:self.endx] = \
-            np.ones((int(self.lineh), self.block[0], 3), dtype=np.uint8) * color
+        try:
+            self.image[y1:y2, self.startx:self.endx] = \
+                np.ones((int(self.lineh), self.block[0], 3), dtype=np.uint8) * color
+        except ValueError:
+            print(f"\nErr at row = {row}")
+            raise
         self.image_pil = Image.fromarray(self.image)
         self.draw = ImageDraw.Draw(self.image_pil)
+
+if __name__ == '__main__':
+    print(line_splitter(' linewidth = 5 if i == 0 and fr == 1 else None)'))

@@ -52,8 +52,7 @@ class Animator:
 
     def animate(self, name):
         job = pd.read_csv(f'src/jobs/{name}.txt', sep = ';',
-            names = ['line', 'tabs'], skipinitialspace = True,
-            keep_default_na = False)
+                          names = ['line', 'tabs'], keep_default_na = False)
         lines = job.to_numpy()
         self._animate(lines, name)
         self._reload_frame()
@@ -64,7 +63,7 @@ class Animator:
         fps = self.config['video']['fps']
         chps = self.config['video']['chps']
         ext = self.config['video']['ext']
-        filepath = f"output/{name}-{size}px-{fps}fps-{chps}chps.{ext}"
+        filepath = f"vids/{name}-{size}px-{fps}fps-{chps}chps.{ext}"
         return filepath
 
     def _animate(self, lines, name):
