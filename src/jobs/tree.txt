@@ -1,0 +1,10 @@
+def expand_tree(self, positions, tree, depth, chord):; 0
+if depth == 6:; 1
+positions.append(chord); 2
+else:; 1
+for branch in tree[depth]:; 2
+self.expand_tree(positions, tree, depth + 1, [*chord, branch]); 3
+if not depth:; 1
+return np.array(positions); 2
+; 2
+; 2

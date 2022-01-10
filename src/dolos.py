@@ -1,6 +1,8 @@
 
 import os
+import sys
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 import yaml
@@ -33,24 +35,45 @@ class Animator:
         if load_frame and os.path.isfile(self.frame_path) and False:
             self.frame = pickle.load(open(self.frame_path, 'rb'))
         else:
-            pickle.dump(new_hash, open(self.hash_path, 'wb'))
             self.frame = make_frame(self.config)
             plt.imsave(self.frame_fig_path, self.frame.astype(np.uint8))
             pickle.dump(self.frame, open(self.frame_path, 'wb'))
+            pickle.dump(new_hash, open(self.hash_path, 'wb'))
 
+        self.typewriter = Typewriter(self.config, self.frame)
+
+    def _reload_frame(self):
+        self.frame = pickle.load(open(self.frame_path, 'rb'))
         self.typewriter = Typewriter(self.config, self.frame)
 
     def _add_frames(self, frame, writer, n):
         for _ in range(n):
             writer.write(frame[:,:,::-1])
 
-    def animate(self, lines, name):
+    def animate(self, name):
+        job = pd.read_csv(f'src/jobs/{name}.txt', sep = ';',
+            names = ['line', 'tabs'], skipinitialspace = True,
+            keep_default_na = False)
+        lines = job.to_numpy()
+        self._animate(lines, name)
+        self._reload_frame()
+
+    def _file_path(self, name):
+        size = f"{self.config['dimensions']['resolution']}"
+        size = size.replace(', ', 'x').replace('[', '').replace(']', '')
+        fps = self.config['video']['fps']
+        chps = self.config['video']['chps']
+        ext = self.config['video']['ext']
+        filepath = f"output/{name}-{size}px-{fps}fps-{chps}chps.{ext}"
+        return filepath
+
+    def _animate(self, lines, name):
         print(f'\nStarting animation named {name}')
 
-        filepath = f"output/{name}.{self.config['video']['ext']}"
         size = tuple(self.config['dimensions']['resolution'])
         fps = self.config['video']['fps']
         chps = self.config['video']['chps']
+        filepath = self._file_path(name)
         n = fps // chps
         m = len(lines)
 
@@ -78,36 +101,5 @@ class Animator:
 
 if __name__ == '__main__':
     anim = Animator()
-    anim.animate([
-        ["class Guitar", 0],
-        ["def __init__(self):", 1],
-        ["self.tone_dict = {", 2],
-        ["'C':   0, 'C#': 1,", 3],
-        ["'Db':  1, 'D':  2, 'D#':  3,", 3],
-        ["'Eb':  3, 'E':  4,", 3],
-        ["'F':   5, 'F#': 6,", 3],
-        ["'Gb':  6, 'G':  7, 'G#':  8,", 3],
-        ["'Ab':  8, 'A':  9, 'A#': 10,", 3],
-        ["'Bb': 10, 'B': 11", 3],
-        ["}", 2],
-        ["", 2],
-        ["self.note_dict = {", 2],
-        ["'M': ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'],", 3],
-        ["'m': ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']", 3],
-        ["}", 2],
-        ["", 2],
-        ["self.chord_base_dict = {", 2],
-        ["'M':    np.array([0, 4, 7]),", 3],
-        ["'M7':   np.array([0, 4, 7, 11]),", 3],
-        ["'maj7': np.array([0, 4, 7, 11]),", 3],
-        ["'m':    np.array([0, 3, 7]),", 3],
-        ["'m7':   np.array([0, 3, 7, 10]),", 3],
-        ["'dim':  np.array([0, 3, 6]),", 3],
-        ["'dim7': np.array([0, 3, 6,  9]),", 3],
-        ["'aug':  np.array([0, 4, 8]),", 3],
-        ["'aug7': np.array([0, 4, 8, 11]),", 3],
-        ["'7':    np.array([0, 4, 7, 10]),", 3],
-        ["'mM7':  np.array([0, 3, 7, 11])", 3],
-        ["}", 2],
-        ["", 2]
-    ], 'testvid')
+    for job in sys.argv[1:]:
+        anim.animate(job)

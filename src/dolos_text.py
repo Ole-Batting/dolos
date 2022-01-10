@@ -7,7 +7,7 @@ def line_splitter(line):
     in_string = False
     word = ''
     for i, c in enumerate(line):
-        if c in ' .,:([{}])' and not in_string:
+        if c in ' .,:*([{}])' and not in_string:
             if word:
                 words.append(word)
             words.append(c)
@@ -57,6 +57,29 @@ class Typewriter:
         self.tabw = config['tabwidth']
         self.head = 0
 
+        self.statements = [
+            'def',
+            'class',
+            'if',
+            'elif',
+            'else',
+            'import',
+            'as',
+            'is',
+            'in',
+            'and',
+            'or',
+            'return',
+            'for',
+            'while',
+            'from',
+            'not',
+            'try',
+            'except',
+            'finally',
+            'with'
+        ]
+
     def add_line(self, *args):
         self._add_line(*args)
         self.image = np.array(self.image_pil)
@@ -79,8 +102,8 @@ class Typewriter:
     def mint(self, w, word, words, x, y):
         color = self.cfg['theme']['regular']
 
-        if word in ['def', 'class']:
-            self._write(word, 'defclass', x, y)
+        if word in self.statements:
+            self._write(word, 'statement', x, y)
         elif w - 2 >= 0 and words[w - 2] in ['def', 'class']:
             self._write(word, 'construct', x, y)
         elif w + 1 < len(words) and words[w + 1] == '(':
