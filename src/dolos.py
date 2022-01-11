@@ -100,5 +100,17 @@ class Animator:
 
 if __name__ == '__main__':
     anim = Animator()
-    for job in sys.argv[1:]:
-        anim.animate(job)
+    jobs_dir = os.listdir('src/jobs')
+    jobs_names = [j.replace('.txt', '') for j in jobs_dir]
+    vids_dir = os.listdir('vids')
+    vids_names = [(v.split('-'))[0] for v in vids_dir]
+    if sys.argv[1] == '-all':
+        for job in jobs_names:
+            anim.animate(job)
+    elif sys.argv[1] =='-new':
+        for job in jobs_names:
+            if job not in vids_names:
+                anim.animate(job)
+    else:
+        for job in sys.argv[1:]:
+            anim.animate(job)
