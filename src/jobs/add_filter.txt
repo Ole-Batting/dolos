@@ -20,7 +20,10 @@ if not string_frets[string]:;4
 valid = False;5
 if valid:;3
 for pose in self.expand_tree([], string_frets, 0, []):;4
-if len(pose[pose >= 0]) >= self.min_strings:;5
+if all([;5
+len(pose[pose >= 0]) >= self.min_strings,;6
+len(pose[pose > 0]) <= self.max_fingers;6
+]):;5
 positions.append(pose);6
 return positions;2
 ;2
