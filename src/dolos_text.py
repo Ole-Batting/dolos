@@ -41,6 +41,14 @@ def is_numeric(s):
     except ValueError:
         return False
 
+def split_tabs(line):
+    n = 0
+    for s in line:
+        if s!=' ':
+            break
+        n += 1
+    return line[(n//4*4):], n//4
+
 class Typewriter:
     def __init__(self, config, image):
         self.cfg = config
@@ -93,7 +101,7 @@ class Typewriter:
         self.head = 0
         x = self.textx + tabs * self.tabw * self.textw
         y = self.texty + row * self.lineh
-
+        
         words = line_splitter(line)
         for w, word in enumerate(words):
             self.mint(w, word, words, x, y)

@@ -51,10 +51,11 @@ class Animator:
             writer.write(frame[:,:,::-1])
 
     def animate(self, name):
-        job = pd.read_csv(f'src/jobs/{name}.txt', sep = ';',
-                          names = ['line', 'tabs'], keep_default_na = False)
-        lines = job.to_numpy()
-        self._animate(lines, name)
+        with open(f'src/jobs/{name}.txt', 'r') as f:
+            job = f.readlines()
+        cmd = job[0].replace('\n', '')
+        lines = [j.replace('\n', '') for j in job[1:]]
+        self._animate(lines, name, cmd)
         self._reload_frame()
 
     def _file_path(self, name):
@@ -66,7 +67,7 @@ class Animator:
         filepath = f"vids/{name}-{size}px-{fps}fps-{chps}chps.{ext}"
         return filepath
 
-    def _animate(self, lines, name):
+    def _animate(self, lines, name, cmd):
         print(f'\nStarting animation named {name}')
 
         size = tuple(self.config['dimensions']['resolution'])
@@ -80,11 +81,23 @@ class Animator:
 
         fourcc = cv2.VideoWriter_fourcc(*self.config['video']['fourcc'])
         writer = cv2.VideoWriter(filepath, fourcc, fps, size)
-        self._add_frames(self.frame, writer, n)
 
+        if cmd=='!STD':
+            self._std_animate(lines, writer, n, m)
+        elif cmd=='!INS':
+            self._ins_animate(lines, writer, n, m)
+        writer.release()
+
+        print(f' -- {m}/{m} lines animated -- \n -- done -- \n')
+        print(filepath, '\n')
+    
+    def _std_animate(self, lines, writer, n, m):
+
+        self._add_frames(self.frame, writer, n)
         print(f' -- 0/{m} lines animated -- ', end = '\r')
 
-        for row, [line, tabs] in enumerate(lines):
+        for row, rline in enumerate(lines):
+            line, tabs = split_tabs(rline)
             row_frame = self.frame.copy()
             row_typewriter = Typewriter(self.config, row_frame)
             row_typewriter.active_line(row)
@@ -94,9 +107,33 @@ class Animator:
                 self._add_frames(row_typewriter.image, writer, n)
             self.frame = self.typewriter.add_line(line, row, tabs)
             print(f' -- {row + 1}/{m} lines animated -- ', end = '\r')
-        writer.release()
 
-        print(f' -- {m}/{m} lines animated -- \n -- done -- \n')
+    def _ins_animate(self, lines, writer, n, m):
+        m = 0
+        for row, rline in enumerate(lines):
+            iline, tabs = split_tabs(rline)
+            if iline[0]=='^':
+                m += 1
+            else:
+                self.frame = self.typewriter.add_line(iline, row, tabs)
+        
+        self._add_frames(self.frame, writer, n)
+        print(f' -- 0/{m} lines animated -- ', end = '\r')
+
+        for row, rline in enumerate(lines):
+            iline, tabs = split_tabs(rline)
+            if iline[0]=='^':
+                line = iline[1:]
+                row_frame = self.frame.copy()
+                row_typewriter = Typewriter(self.config, row_frame)
+                row_typewriter.active_line(row)
+                self._add_frames(row_typewriter.image, writer, n)
+                for i in range(len(line)):
+                    row_typewriter.add_line(line[:i + 1], row, tabs)
+                    self._add_frames(row_typewriter.image, writer, n)
+                self.frame = self.typewriter.add_line(line, row, tabs)
+                print(f' -- {row + 1}/{m} lines animated -- ', end = '\r')
+
 
 if __name__ == '__main__':
     anim = Animator()

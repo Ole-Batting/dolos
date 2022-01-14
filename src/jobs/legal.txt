@@ -1,11 +1,12 @@
-def legal_mute(self, pose):;1
-voiced = [];2
-muted = [];2
-for i, p in enumerate(pose):;2
-if p == -1:;3
-muted.append(i);4
-else:;3
-voiced.append(i);4
-return not any([s < max(voiced) and s > min(voiced) for s in muted]);2
-;2
-;2
+!STD
+    def legal_mute(self, pose):
+        voiced = []
+        muted = []
+        for i, p in enumerate(pose):
+            if p == -1:
+                muted.append(i)
+            else:
+                voiced.append(i)
+        return not any([s < max(voiced) and s > min(voiced) for s in muted])
+        
+        
