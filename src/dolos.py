@@ -32,7 +32,7 @@ class Animator:
         with open(self.config_path, 'r') as file:
             self.config = yaml.safe_load(file)
 
-        if load_frame and os.path.isfile(self.frame_path) and False:
+        if load_frame and os.path.isfile(self.frame_path):
             self.frame = pickle.load(open(self.frame_path, 'rb'))
         else:
             self.frame = make_frame(self.config)
@@ -112,7 +112,7 @@ class Animator:
         m = 0
         for row, rline in enumerate(lines):
             iline, tabs = split_tabs(rline)
-            if iline[0]=='^':
+            if len(iline)>0 and iline[0]=='^':
                 m += 1
             else:
                 self.frame = self.typewriter.add_line(iline, row, tabs)
@@ -122,7 +122,7 @@ class Animator:
 
         for row, rline in enumerate(lines):
             iline, tabs = split_tabs(rline)
-            if iline[0]=='^':
+            if len(iline)>0 and iline[0]=='^':
                 line = iline[1:]
                 row_frame = self.frame.copy()
                 row_typewriter = Typewriter(self.config, row_frame)

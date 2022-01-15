@@ -25,7 +25,7 @@ dimensions:
   lineheight: 1.2
 
 video:
-  fps:    16
+  fps:    8
   chps:   8
   fourcc: MJPG
   ext:    avi

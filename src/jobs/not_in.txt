@@ -1,0 +1,3 @@
+!STD
+    def pose_not_in_positions(self, pose, positions):
+        return not next((True for elem in positions if np.array_equal(elem, pose)), False)

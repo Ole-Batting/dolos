@@ -1,12 +1,13 @@
-def plot_cross(self, i, radius = 0.3, ax=None):;1
-x1 = [i - radius * 0.7, i + radius * 0.7];2
-x2 = [i + radius * 0.7, i - radius * 0.7];2
-y = [0.5 - radius * 0.7, 0.5 + radius * 0.7];2
-if ax==None:;2
-plt.plot(x1, y, 'black');3
-plt.plot(x2, y, 'black');3
-else:;2
-ax.plot(x1, y, 'black');3
-ax.plot(x2, y, 'black');3
-;3
-;3
+!STD
+    def plot_cross(self, i, radius = 0.3, ax=None):
+        x1 = [i - radius * 0.7, i + radius * 0.7]
+        x2 = [i + radius * 0.7, i - radius * 0.7]
+        y = [0.5 - radius * 0.7, 0.5 + radius * 0.7]
+        if ax==None:
+            plt.plot(x1, y, 'black')
+            plt.plot(x2, y, 'black')
+        else:
+            ax.plot(x1, y, 'black')
+            ax.plot(x2, y, 'black')
+            
+            
