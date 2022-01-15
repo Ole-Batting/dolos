@@ -26,9 +26,10 @@
                         len(pose[pose > 0]) <= self.max_fingers,
                         self.legal_mute(pose),
                         self.chord_represented(pose, chord),
-                        ^self.pose_not_in_positions(pose, positions)
+                        self.pose_not_in_positions(pose, positions)
                     ]):
                         positions.append(pose)
-        return positions
+        ^inversions = self.inversion_sort(positions, chord)
+        ^return inversions
         
         

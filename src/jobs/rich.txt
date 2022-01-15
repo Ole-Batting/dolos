@@ -1,0 +1,23 @@
+!STD
+    def fret_sort(self, elem):
+        if len(elem[elem>0]>0):
+            return np.mean(elem[elem>0])
+        else:
+            return 0
+    
+    def mute_sort(self, elem):
+        return max(self.n_strings * len(elem[elem==-1]) - np.sum(np.argwhere(elem==-1)), 2)
+    
+    def finger_sort(self, elem):
+        return len(elem[elem>0])
+    
+    def rough_finger_sort(self, elem):
+        return max(len(elem[elem>0]), 3)
+        
+
+    def rich_sort(self, positions):
+        for p in positions:
+            p.sort(key=self.finger_sort)
+            p.sort(key=self.fret_sort)
+            p.sort(key=self.mute_sort)
+            p.sort(key=self.rough_finger_sort)
