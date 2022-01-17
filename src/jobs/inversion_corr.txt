@@ -1,0 +1,9 @@
+!STD
+    def inversion_sort(self, positions, chord):
+        inversions = []
+        for i in chord:
+            inversions.append([])
+            for j in positions:
+                if min(j[j!=-1] + self.open_strings[j!=-1]) % 12 == self.tone_dict[i]:
+                    inversions[-1].append(j)
+        return inversions
