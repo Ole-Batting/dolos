@@ -16,10 +16,10 @@ class Guitar:
             'm': ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
         }
         
-    def aspn_to_index(self, aspn):
-        return int(aspn[-1]) * 12 + self.tone_dict[aspn[:-1]]
+    def ipn_to_index(self, ipn):
+        return int(ipn[-1]) * 12 + self.tone_dict[ipn[:-1]]
     
-    def index_to_aspn(self, index, major='M'):
+    def index_to_ipn(self, index, major='M'):
         octave = index // 12
         tone = index % 12
         return self.note_dict[major][tone] + str(octave)
