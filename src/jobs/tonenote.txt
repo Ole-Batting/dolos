@@ -11,16 +11,17 @@ class Guitar:
             'Bb': 10, 'B': 11
         }
         
-        self.note_dict = {
-            'M': ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'
-            'm': ['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B']
-        }
-        
-    def ipn_to_index(self, ipn):
-        return int(ipn[-1]) * 12 + self.tone_dict[ipn[:-1]]
-    
-    def index_to_ipn(self, index, major='M'):
-        octave = index // 12
-        tone = index % 12
-        return self.note_dict[major][tone] + str(octave)
+        self.note_list = [
+            'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'
+        ]
 
+    def ipn_to_number(self, ipn):
+        # assume the octave is a single digit.
+        octave = int(ipn[-1])
+        tone = self.tone_dict[ipn[:-1]]
+        return octave * 12 + tone
+    
+    def number_to_ipn(self, number):
+        octave = number // 12
+        tone = number % 12
+        return self.note_list[tone] + str(octave)

@@ -1,7 +1,7 @@
 !STD
-    def chord_permutations(self, chord):
+    def _chord_voicings(self, chord):
         board = self.chord_board(chord)
-        positions = []
+        voicings = []
         for fret in range(1, self.n_frets - self.n_span + 1):
             string_frets = []
             valid = True
@@ -19,5 +19,6 @@
                             string_frets[string].append(k)
                 if not string_frets[string]:
                     valid = False
+
                     
-                    
+    

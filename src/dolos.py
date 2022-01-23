@@ -82,9 +82,11 @@ class Animator:
         writer = cv2.VideoWriter(filepath, fourcc, fps, size)
 
         if cmd=='!STD':
-            self._std_animate(lines, writer, n, m)
+            last_frame = self._std_animate(lines, writer, n, m)
         elif cmd=='!INS':
-            self._ins_animate(lines, writer, n, m)
+            last_frame = self._ins_animate(lines, writer, n, m)
+        self._add_frames(last_frame, writer, fps)
+        self._add_frames(self.frame, writer, fps)
         writer.release()
 
         print(f' -- {m}/{m} lines animated -- \n -- done -- \n')
@@ -106,6 +108,7 @@ class Animator:
                 self._add_frames(row_typewriter.image, writer, n)
             self.frame = self.typewriter.add_line(line, row, tabs)
             print(f' -- {row + 1}/{m} lines animated -- ', end = '\r')
+        return row_typewriter.image
 
     def _ins_animate(self, lines, writer, n, m):
         m = 0
@@ -132,6 +135,7 @@ class Animator:
                     self._add_frames(row_typewriter.image, writer, n)
                 self.frame = self.typewriter.add_line(line, row, tabs)
                 print(f' -- {row + 1}/{m} lines animated -- ', end = '\r')
+        return row_typewriter.image
 
 
 if __name__ == '__main__':

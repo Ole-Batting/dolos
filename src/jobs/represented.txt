@@ -1,6 +1,6 @@
 !STD
-    def chord_represented(self, pose, chord):
-        voiced_tones = (pose[pose != -1] + self.open_strings[pose != -1]) % 12
+    def chord_represented(self, voicing, chord):
+        voiced_tones = (voicing[voicing != -1] + self.open_strings[voicing != -1]) % 12
         return all([self.tone_dict[tone] in voiced_tones for tone in chord])
 
         

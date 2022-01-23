@@ -1,11 +1,11 @@
 !STD
-    def expand_tree(self, positions, tree, depth, chord):
+    def expand_tree(self, voicings, tree, depth, chord):
         if depth == 6:
-            positions.append(chord)
+            voicings.append(chord)
         else:
             for branch in tree[depth]:
-                self.expand_tree(positions, tree, depth + 1, [*chord, branch])
+                self.expand_tree(voicings, tree, depth + 1, [*chord, branch])
         if not depth:
-            return np.array(positions)
+            return np.array(voicings)
             
             

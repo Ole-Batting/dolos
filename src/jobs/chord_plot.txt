@@ -18,17 +18,17 @@
             if c == -1:
                 self.plot_cross(i, radius)
                 plt.text(x - 0.2, -5.5,
-                         self.index_to_aspn(np.flip(self.open_strings)[i]),
+                         self.number_to_ipn(np.flip(self.open_strings)[i]), 
                          color = 'gray')
             else:
                 ax.add_patch(plt.Circle((x, y), radius, color = 'black', fill = c != 0))
-                plt.text(x - 0.2, -5.5, s
-                         self.index_to_aspn(c + np.flip(self.open_strings)[i]))
+                plt.text(x - 0.2, -5.5,
+                         self.number_to_ipn(c + np.flip(self.open_strings)[i]))
         # starting fret
         if fr != 1:
             plt.text(-0.3 * len(str(fr)) - 0.4, -0.68, f'{fr}', fontsize = 'xx-large')
 
         ax.axis('off')
         ax.axis('equal')
-        plt.title(name.replace('M', ''))
+        plt.title(name.replace("M7", "maj7").replace("M", ""))
         plt.show()

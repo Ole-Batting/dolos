@@ -1,7 +1,7 @@
 theme:
   regular:    [220, 220, 220]
   statement:  [182, 133, 245] # [172, 153, 255] ##2 [203, 191, 255]
-  construct:  [101, 66, 255] # [138, 138, 245] ##1 [143, 143, 245]
+  construct:  [121, 76, 255] # [138, 138, 245] ##1 [143, 143, 245]
   function:   [77, 195, 255] ##1 [102, 204, 255]
   member:     [255, 206, 153] ##1 [255, 218, 179] # [102, 204, 255]
   self:       [255, 206, 153] ##1 [255, 218, 179] # [102, 204, 255]
@@ -17,7 +17,7 @@ background:
   edgewidth:  8
   edgebands:  8
   bgndbands:  [4, 16] # band, bgnd
-  actratio:   3
+  actratio:   5
 
 dimensions:
   resolution: [3200, 1800]
@@ -25,8 +25,8 @@ dimensions:
   lineheight: 1.2
 
 video:
-  fps:    8
-  chps:   8
+  fps:    16
+  chps:   16
   fourcc: MJPG
   ext:    avi
 
